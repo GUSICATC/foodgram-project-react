@@ -1,6 +1,6 @@
 import re
 
-from django.core.exceptions import ValidationError
+
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from users.models import MAX_LENGTH_EMAIL, MAX_LENGTH_NAME, User
@@ -13,14 +13,6 @@ class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("username", "email")
-
-    def validate_username(self, value):
-        name = value.lower()
-        if name == "me" and re.fullmatch(r"^[\w.@+-]+\Z", value):
-            return value
-        raise serializers.ValidationError(
-            "Невозможно создать пользователя с таким набором симвлолов"
-        )
 
     def validate(self, data):
         if not ("username" or "email") in data:
@@ -60,6 +52,5 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "last_name",
-            "bio",
             "role",
         )

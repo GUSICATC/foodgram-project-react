@@ -34,7 +34,8 @@ class Ingredients(models.Model):
     name = models.CharField(
         'Название ингридиента',
         max_length=MAX_LENGTH_FOR_CHARFIELD)
-    measurement_unit = models.CharField('единица измерения', choices=CHOICES)
+    measurement_unit = models.CharField(
+        'единица измерения', choices=CHOICES, max_length=MAX_LENGTH_FOR_CHARFIELD)
 
     class Meta:
         verbose_name = "ингридиент"
