@@ -54,3 +54,12 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "role",
         )
+
+
+class RecipeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "name",
+
+        )

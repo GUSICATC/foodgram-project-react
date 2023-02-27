@@ -3,7 +3,7 @@ import uuid
 
 from api.serializers import (
     SignUpSerializer,
-    TokenSerializer, UserSerializer)
+    TokenSerializer, UserSerializer, RecipeSerializer)
 from django.conf import settings
 from django.core.mail import send_mail
 
@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.filters import SearchFilter
-
+from recipes.models import Recipe
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
@@ -90,15 +90,14 @@ def send_confirmation_code(user):
     return send_mail(subject, message, from_email, to_email)
 
 
-# class CategoryViewSet(ListCreateDestroyViewSet):
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
+class RecipeViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
 
 
-# class GenreViewSet(ListCreateDestroyViewSet):
-#     queryset = Genre.objects.all()
-#     serializer_class = GenreSerializer
-
+# class FavoriteViewSet(viewsets.ModelViewSet):
+#     queryset = Favorite.objects.all()
+#     serializer_class = RecipeSerializer
 
 # class TitleViewSet(viewsets.ModelViewSet):
 #     queryset = Title.objects.all().annotate(rating=Avg("reviews__score"))
