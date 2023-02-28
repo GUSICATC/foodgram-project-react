@@ -6,17 +6,11 @@ from api.views import (get_token, UserViewSet, RecipeViewSet,
 router = DefaultRouter()
 
 router.register(r"users", UserViewSet, basename="users")
-router.register(r"users/subscriptions/", UserViewSet, basename="users")
-router.register(r"users/(?P<users_id>\d+)/subscriptions/",
-                UserViewSet, basename="users")
-router.register(r"ingredients", UserViewSet, basename="users")
-router.register(r"ingredients/(?P<ingredients_id>\d+)/",
-                UserViewSet, basename="users")
-router.register(r"tags", UserViewSet, basename="tags")
-router.register(r"tags/(?P<tags_id>\d+)/", UserViewSet, basename="tags")
+router.register(r"users/subscriptions/",
+                SubscriptionsViewSet, basename="users")
+router.register(r"ingredients", IngredientsViewSet, basename="users")
+router.register(r"tags", TagsViewSet, basename="tags")
 router.register(r"recipes", RecipeViewSet, basename="recipes")
-router.register(r"recipes/(?P<recipes_id>\d+)",
-                RecipeViewSet, basename="recipes")
 router.register(r"recipes/(?P<recipes_id>\d+)/shopping_cart/",
                 FavoriteViewSet, basename="tags")
 router.register(r"recipes/(?P<recipes_id>\d+)/favorite/",
