@@ -12,7 +12,7 @@ class CustomUserAdmin(UserAdmin):
         "last_name",
         "is_staff",
         "is_superuser",
-        "confirmation_code",
+        "auth_token",
     )
 
 

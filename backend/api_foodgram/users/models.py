@@ -43,12 +43,6 @@ class User(AbstractUser):
         verbose_name="Роль",
         blank=True,
     )
-    confirmation_code = models.CharField(
-        "код подтверждения",
-        max_length=MAX_LENGTH_CODE,
-        null=True,
-        blank=True,
-    )
 
     class Meta:
         verbose_name = "Пользователь"

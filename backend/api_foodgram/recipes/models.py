@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from users.models import User
 MAX_LENGTH_FOR_CHARFIELD: int = 200
 MAX_LENGTH_FOR_SLUG: int = 50
 CHOICES = (
@@ -60,7 +61,7 @@ class Recipe(models.Model):
 
     image = models.ImageField(
         'Картинка',
-        upload_to='media/',
+
         blank=True
     )
 
@@ -77,6 +78,12 @@ class Recipe(models.Model):
                                            MinValueValidator(1)
                                        ]
                                        )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="автор",
+
+    )
 
     class Meta:
         verbose_name = "Рецепт"
