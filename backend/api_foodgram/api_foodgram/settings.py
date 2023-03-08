@@ -3,15 +3,15 @@ from datetime import timedelta
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
-
-
+from dotenv import load_dotenv
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", default=get_random_secret_key())
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'rest_framework.authtoken',
     'djoser',
     'api',
@@ -30,13 +31,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'api_foodgram.urls'
@@ -65,7 +69,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -114,19 +117,15 @@ REST_FRAMEWORK = {
 }
 DJOSER = {
     'LOGIN_FIELD': 'email',
+    # 'PERMISSIONS': {'user': ['rest_framework.permissions.AllowAny'], },
     'SERIALIZERS': {'user': 'api.serializers.UserSerializer',
-                    'current_user': 'api.serializers.UserSerializer'
+                    'current_user': 'api.serializers.UserSerializer',
+                    'user_create': 'api.serializers.UserSerializer',
                     },
 
 }
+CORS_ORIGIN_ALLOW_ALL = True
 AUTH_USER_MODEL = "users.User"
-
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-
-EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
-
-ADMIN_EMAIL = "admin@yamdb.com"
-
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False

@@ -23,6 +23,7 @@ class CategoryAdmin(admin.ModelAdmin):
         'name',
         'text',
         'cooking_time',
+
     )
     search_fields = ("name",)
 

@@ -6,11 +6,9 @@ MAX_LENGTH_CODE = 255
 MAX_LENGTH_ROLE = 10
 MAX_LENGTH_EMAIL = 254
 USER_ROLE = "user"
-MODERATOR_ROLE = "moderator"
 ADMIN_ROLE = "admin"
 USERS_ROLE = (
     (USER_ROLE, "Пользователь"),
-    (MODERATOR_ROLE, "Модератор"),
     (ADMIN_ROLE, "Администратор"),
 )
 
@@ -58,7 +56,3 @@ class User(AbstractUser):
     @property
     def is_admin(self):
         return self.is_superuser or self.role == ADMIN_ROLE
-
-    @property
-    def is_moderator(self):
-        return self.role == MODERATOR_ROLE
