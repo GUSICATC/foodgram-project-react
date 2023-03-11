@@ -60,10 +60,10 @@ class Recipe(models.Model):
                                          related_name='ingredients',
                                          verbose_name='ингридиент',
                                          )
-    favorit = models.ManyToManyField(
-        User, related_name="favorit", default=None, blank=True,)
-    in_shopping_cart = models.ManyToManyField(
-        User, related_name="in_shopping_cart", default=None, blank=True,)
+    is_favorited = models.ManyToManyField(
+        User, through='Favorit', related_name="favorited", default=None, blank=True,)
+    is_in_shopping_cart = models.ManyToManyField(
+        User, through='ShoppingCart', related_name="in_shopping_cart", default=None, blank=True,)
     name = models.CharField(
         "Название",
         max_length=MAX_LENGTH_FOR_CHARFIELD,
@@ -95,9 +95,23 @@ class Recipe(models.Model):
 class IngredientsAmount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredients = models.ForeignKey(Ingredients, on_delete=models.CASCADE)
-    amount = models.CharField('количество', blank=True,
-                              max_length=MAX_LENGTH_FOR_CHARFIELD)
+    amount = models.PositiveIntegerField('количество', null=True, blank=True,
+                                         )
 
     class Meta:
         verbose_name = "Ингридиент"
         verbose_name_plural = "Ингридиенты"
+
+    def __str__(self):
+        return (f'{str(self.ingredients)},{str(self.amount)}'
+                f'{str(self.ingredients.measurement_unit)}')
+
+
+class ShoppingCart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+
+class Favorit(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)

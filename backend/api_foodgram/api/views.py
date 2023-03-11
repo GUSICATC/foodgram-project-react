@@ -29,20 +29,33 @@ class RecipeViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeSerializer
     permission_classes = (AllowAny,)
     filter_backends = (SearchFilter,)
-    search_fields = ('tag',)
-     
+    search_fields = ('tag', 'name',)
+
     @action(methods=['post', 'delete',], detail=True)
     def favorite(self, request, id=None):
         recipe = get_object_or_404(Recipe, id=id)
 
         if request.method == 'POST':
-            if recipe.favorite.filter(id=request.user.id).exists():
+            if recipe.is_favorited.filter(id=request.user.id).exists():
                 return Response({'ошибка рицепт уже в избранном'})
-            recipe.favorite.add(request.user)
-            return Response({'добавлен в любимые'})
+            recipe.is_favorited.add(request.user)
+            return Response({'добавлен в избранное'})
 
-        recipe.favorite.remove(request.user)
-        return Response({'удален из любимых'})
+        recipe.is_favorited.remove(request.user)
+        return Response({'удален из избранного'})
+
+    @action(methods=['post', 'delete',], detail=True)
+    def shopping_cart(self, request, id=None):
+        recipe = get_object_or_404(Recipe, id=id)
+
+        if request.method == 'POST':
+            if recipe.is_in_shopping_cart.filter(id=request.user.id).exists():
+                return Response({'ошибка рицепт уже в корзине'})
+            recipe.is_in_shopping_cart.add(request.user)
+            return Response({'добавлен в корзину'})
+
+        recipe.is_in_shopping_cart.remove(request.user)
+        return Response({'удален из корзины'})
 
 
 class SubscriptionsViewSet(viewsets.ModelViewSet):
