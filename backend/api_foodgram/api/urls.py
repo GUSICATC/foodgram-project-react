@@ -26,4 +26,4 @@ urlpatterns = [
     # path('recipes/download_shopping_cart/', download_shopping_cart)
 
 ]
-print(router.urls)
+# print(router.urls)

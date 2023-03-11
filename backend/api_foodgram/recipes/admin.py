@@ -1,37 +1,48 @@
 from django.contrib import admin
-from recipes.models import Tags, Recipe, Ingredients
+from recipes.models import Tags, Recipe
+from import_export.admin import ImportExportModelAdmin
+from django.contrib import admin
+from .resource import ReportResourceIngredients, ReportResourceTags, ReportResourceRecipe
+from .models import Ingredients, IngredientsAmount
 
 
-@admin.register(Tags)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        "name",
-        'color',
-        'slug',
-    )
+class AmountInline(admin.TabularInline):
+    model = IngredientsAmount
+    extra = 1
+
+
+class IngredientsAdmin(ImportExportModelAdmin):
+    resource_class = ReportResourceIngredients
     search_fields = ("name",)
 
 
-@admin.register(Recipe)
-class CategoryAdmin(admin.ModelAdmin):
+admin.site.register(Ingredients, IngredientsAdmin)
+
+
+class RecipeAdmin(ImportExportModelAdmin):
+    resource_class = ReportResourceRecipe
+    inlines = (AmountInline),
     list_display = (
-        'ingredients',
         'author',
-        "tags",
-        'image',
         'name',
+        'image',
         'text',
         'cooking_time',
 
     )
-    search_fields = ("name",)
+    filter_horizontal = ('tags', 'favorit', 'in_shopping_cart')
+    search_fields = ("author",)
 
 
-@admin.register(Ingredients)
-class CategoryAdmin(admin.ModelAdmin):
+admin.site.register(Recipe, RecipeAdmin)
+
+
+@admin.register(Tags)
+class TagsAdmin(ImportExportModelAdmin):
+    resource_class = ReportResourceTags
     list_display = (
-        'name',
-        'measurement_unit',
+        "name",
+        'color',
+        'slug',
     )
     search_fields = ("name",)

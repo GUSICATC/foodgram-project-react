@@ -30,7 +30,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     filter_backends = (SearchFilter,)
     search_fields = ('tag',)
-
+     
     @action(methods=['post', 'delete',], detail=True)
     def favorite(self, request, id=None):
         recipe = get_object_or_404(Recipe, id=id)

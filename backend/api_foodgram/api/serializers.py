@@ -1,44 +1,30 @@
 from rest_framework import serializers
 from users.models import MAX_LENGTH_EMAIL, MAX_LENGTH_NAME, User
 from recipes.models import Tags, Recipe
-import base64  # Модуль с функциями кодирования и декодирования base64
+import base64
 import webcolors
 from django.core.files.base import ContentFile
 import re
 
 
 class Hex2NameColor(serializers.Field):
-    # При чтении данных ничего не меняем - просто возвращаем как есть
     def to_representation(self, value):
         return value
-    # При записи код цвета конвертируется в его название
 
     def to_internal_value(self, data):
-        # Доверяй, но проверяй
         try:
-            # Если имя цвета существует, то конвертируем код в название
             data = webcolors.hex_to_name(data)
         except ValueError:
-            # Иначе возвращаем ошибку
             raise serializers.ValidationError('Для этого цвета нет имени')
-        # Возвращаем данные в новом формате
         return data
 
 
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
-        # Если полученный объект строка, и эта строка
-        # начинается с 'data:image'...
         if isinstance(data, str) and data.startswith('data:image'):
-            # ...начинаем декодировать изображение из base64.
-            # Сначала нужно разделить строку на части.
             format, imgstr = data.split(';base64,')
-            # И извлечь расширение файла.
             ext = format.split('/')[-1]
-            # Затем декодировать сами данные и поместить результат в файл,
-            # которому дать название по шаблону.
             data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-
         return super().to_internal_value(data)
 
 
@@ -51,8 +37,20 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
-
+            'password',
         )
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User(
+            email=validated_data['email'],
+            username=validated_data['username'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
     def validate_username(self, value):
         if re.fullmatch(r"^[\w.@+-]+\Z", value):
@@ -76,21 +74,22 @@ class TagsSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
+
     image = Base64ImageField(required=False, allow_null=True)
-    is_favorited = serializers.SerializerMethodField('get_favorited')
-    # is_in_shopping_cart = serializers.SerializerMethodField(
-    #   'get_shopping_cart')
+    # tags = serializers.PrimaryKeyRelatedField(queryset=Tags.objects.all())
+    # is_favorited = serializers.SerializerMethodField('get_favorited')
+    # # is_in_shopping_cart = serializers.SerializerMethodField(
+    # #   'get_shopping_cart')
 
     class Meta:
         model = Recipe
-        depth = 1
+
         fields = (
             'id',
             "tags",
             'author',
             'ingredients',
-            'is_favorited',
+            # 'is_favorited',
             # 'is_in_shopping_cart',
             'image',
             'name',
@@ -98,10 +97,30 @@ class RecipeSerializer(serializers.ModelSerializer):
             'cooking_time',
         )
 
-    def get_favorited(self, request):
-        return False
+    def create(self, validated_data):
 
-    #  def get_is_in_shopping_cart(self, obj):
+        author = self.context['request'].user
+        recipe = Recipe.objects.create(author=author, **validated_data)
+
+        return recipe
+    # def update(self, instance, validated_data):
+    #     instance.id = validated_data.get("id", instance.id)
+    #     instance.tags = validated_data.get("tags", instance.tags)
+    #     instance.author = validated_data.get("author", instance.author)
+    #     instance.ingredients = validated_data.get(
+    #         "ingredients", instance.ingredients)
+    #     instance.image = validated_data.get("image", instance.image)
+    #     instance.name = validated_data.get("name", instance.name)
+    #     instance.text = validated_data.get("text", instance.text)
+    #     instance.cooking_time = validated_data.get(
+    #         "cooking_time", instance.cooking_time)
+    #     instance.save()
+    #     return instance
+
+    # def get_favorited(self, request):
+    #     return False
+
+    # def get_is_in_shopping_cart(self, obj):
     #     if self.context.get(
     #         'request'
     #     ) is None or self.context.get('request').user.is_anonymous:
