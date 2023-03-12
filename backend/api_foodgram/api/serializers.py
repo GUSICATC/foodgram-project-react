@@ -67,8 +67,8 @@ class TagsSerializer(serializers.ModelSerializer):
         model = Tags
         fields = (
             'id',
-            "name",
             'color',
+            "name",
             'slug',
         )
 
@@ -162,16 +162,9 @@ class RecipeSerializer(serializers.ModelSerializer):
         ).exists()
 
 
-class FavoriteSerializer(serializers.ModelSerializer):
+class IngredientsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Recipe
+        model = Ingredients
         fields = (
-            'id',
-            "tags",
-            'author',
-            'ingredients',
-            'image',
             'name',
-            'text',
-            'cooking_time',
         )

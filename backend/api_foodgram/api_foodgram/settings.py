@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'import_export',
     'rest_framework',
+    'django_filters',
     'corsheaders',
     'rest_framework.authtoken',
     'djoser',
@@ -101,19 +102,20 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    "DEFAULT_FILTER_BACKENDS": [
-        "django_filters.rest_framework.DjangoFilterBackend",
-    ],
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
-}
+REST_FRAMEWORK = {'SEARCH_PARAM': 'name',
+
+                  "DEFAULT_PERMISSION_CLASSES": [
+                      "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+                  ],
+                  "DEFAULT_AUTHENTICATION_CLASSES": [
+                      'rest_framework.authentication.TokenAuthentication',
+                  ],
+                  "DEFAULT_FILTER_BACKENDS": [
+                      "django_filters.rest_framework.DjangoFilterBackend",
+                  ],
+                  "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+                  "PAGE_SIZE": 10,
+                  }
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {'user': 'api.serializers.UserSerializer',
