@@ -8,10 +8,11 @@ from rest_framework.decorators import api_view
 
 from .serializers import (
     TagsSerializer, RecipeSerializer, IngredientsSerializer)
-
+from .filters import TagsFilter
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets, filters
 from rest_framework.decorators import action
+from .filters import TagsFilter
 
 
 class IngredientsViewSet(viewsets.ModelViewSet):
@@ -36,11 +37,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = (AllowAny,)
-    filter_backends = (DjangoFilterBackend,
-                       filters.SearchFilter, filters.OrderingFilter)
-    filterset_fields = ('author', 'name',
-                        'is_favorited', 'is_in_shopping_cart',)
-    search_fields = ('name',)
+    filterset_class = TagsFilter
 
     @action(methods=['post', 'delete',], detail=True)
     def favorite(self, request, id=None):
