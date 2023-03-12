@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from users.models import MAX_LENGTH_EMAIL, MAX_LENGTH_NAME, User
+from users.models import MAX_LENGTH_EMAIL, MAX_LENGTH_NAME, User, Follow
 from recipes.models import Tags, Recipe, Ingredients, IngredientsAmount, ShoppingCart, Favorit
 import base64
 import webcolors
 from django.core.files.base import ContentFile
 import re
+from rest_framework.validators import UniqueTogetherValidator
 
 
 class Hex2NameColor(serializers.Field):
@@ -167,4 +168,15 @@ class IngredientsSerializer(serializers.ModelSerializer):
         model = Ingredients
         fields = (
             'name',
+        )
+
+
+class FollowSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Follow
+        depth = 1
+        fields = (
+            'user',
+            'following'
         )

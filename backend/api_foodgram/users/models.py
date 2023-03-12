@@ -56,3 +56,22 @@ class User(AbstractUser):
     @property
     def is_admin(self):
         return self.is_superuser or self.role == ADMIN_ROLE
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name='Подписчик',
+        null=True)
+    following = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='following',
+        verbose_name='Подписка',
+        null=True,)
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"

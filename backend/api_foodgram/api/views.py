@@ -1,18 +1,15 @@
-from users.models import User
+from users.models import User, Follow
 from recipes.models import Tags, Recipe, Ingredients
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django_filters.rest_framework import DjangoFilterBackend
-import uuid
-from rest_framework.decorators import api_view
-
-from .serializers import (
-    TagsSerializer, RecipeSerializer, IngredientsSerializer)
-from .filters import TagsFilter
+from .serializers import (UserSerializer,
+                          TagsSerializer,
+                          RecipeSerializer,
+                          IngredientsSerializer, FollowSerializer)
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets, filters
+from rest_framework import status, viewsets, filters, mixins
 from rest_framework.decorators import action
-from .filters import TagsFilter
+from .custom_filters import TagsFilter
 
 
 class IngredientsViewSet(viewsets.ModelViewSet):
@@ -66,27 +63,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response({'удален из корзины'})
 
 
-# class SubscriptionsViewSet(viewsets.ModelViewSet):
-#     lookup_field = "id"
-#     queryset = Recipe.objects.all()
-#     serializer_class = RecipeSerializer
-#     permission_classes = (IsAuthenticated,)
-#     filter_backends = (SearchFilter,)
-#     search_fields = ('tag',)
+class SubscriptionsViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserSerializer
 
-#     @action(methods=['get', 'delete',], detail=True)
-#     def subscribe(self, request, id=None):
-#         recipe = get_object_or_404(Recipe, id=id)
-
-#         if request.method == 'POST':
-#             if recipe.favorited.filter(id=request.user.id).exists():
-#                 return Response({'ошибка рицепт уже в избранном'})
-#             recipe.favorited.add(request.user)
-#             return Response({'добавлен в любимые'})
-
-#         recipe.favorited.remove(request.user)
-#         return Response({'удален из любимых'})
-
-#     @action(methods=['get', 'delete',], detail=True)
-#     def subscriptions(self, request, id=None):
-#         recipe = get_object_or_404(Recipe, id=id)
+    def get_queryset(self):
+        user = self.request.user.id
+        follow = User.objects.all()
+        return follow.filter(following__user_id=user)
