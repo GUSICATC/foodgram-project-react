@@ -1,17 +1,26 @@
+from users.models import User
+from recipes.models import Tags, Recipe, Ingredients
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 import uuid
 from rest_framework.decorators import api_view
 
-from .serializers import (TagsSerializer, RecipeSerializer, FavoriteSerializer)
+from .serializers import (
+    TagsSerializer, RecipeSerializer, IngredientsSerializer)
 
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, filters
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
 
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from recipes.models import Tags, Recipe
-from users.models import User
+
+class IngredientsViewSet(viewsets.ModelViewSet):
+    queryset = Ingredients.objects.all()
+    serializer_class = IngredientsSerializer
+    permission_classes = (AllowAny,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    pagination_class = None
 
 
 class TagsViewSet(viewsets.ModelViewSet):
@@ -19,8 +28,7 @@ class TagsViewSet(viewsets.ModelViewSet):
     queryset = Tags.objects.all()
     serializer_class = TagsSerializer
     permission_classes = (AllowAny,)
-    filter_backends = (SearchFilter,)
-    search_fields = ('tag',)
+    pagination_class = None
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -28,8 +36,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = (AllowAny,)
-    filter_backends = (SearchFilter,)
-    search_fields = ('tag', 'name',)
+    filter_backends = (DjangoFilterBackend,
+                       filters.SearchFilter, filters.OrderingFilter)
+    filterset_fields = ('author', 'name',
+                        'is_favorited', 'is_in_shopping_cart',)
+    search_fields = ('name',)
 
     @action(methods=['post', 'delete',], detail=True)
     def favorite(self, request, id=None):
@@ -58,27 +69,27 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response({'удален из корзины'})
 
 
-class SubscriptionsViewSet(viewsets.ModelViewSet):
-    lookup_field = "id"
-    queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
-    permission_classes = (IsAuthenticated,)
-    filter_backends = (SearchFilter,)
-    search_fields = ('tag',)
+# class SubscriptionsViewSet(viewsets.ModelViewSet):
+#     lookup_field = "id"
+#     queryset = Recipe.objects.all()
+#     serializer_class = RecipeSerializer
+#     permission_classes = (IsAuthenticated,)
+#     filter_backends = (SearchFilter,)
+#     search_fields = ('tag',)
 
-    @action(methods=['get', 'delete',], detail=True)
-    def subscribe(self, request, id=None):
-        recipe = get_object_or_404(Recipe, id=id)
+#     @action(methods=['get', 'delete',], detail=True)
+#     def subscribe(self, request, id=None):
+#         recipe = get_object_or_404(Recipe, id=id)
 
-        if request.method == 'POST':
-            if recipe.favorited.filter(id=request.user.id).exists():
-                return Response({'ошибка рицепт уже в избранном'})
-            recipe.favorited.add(request.user)
-            return Response({'добавлен в любимые'})
+#         if request.method == 'POST':
+#             if recipe.favorited.filter(id=request.user.id).exists():
+#                 return Response({'ошибка рицепт уже в избранном'})
+#             recipe.favorited.add(request.user)
+#             return Response({'добавлен в любимые'})
 
-        recipe.favorited.remove(request.user)
-        return Response({'удален из любимых'})
+#         recipe.favorited.remove(request.user)
+#         return Response({'удален из любимых'})
 
-    @action(methods=['get', 'delete',], detail=True)
-    def subscriptions(self, request, id=None):
-        recipe = get_object_or_404(Recipe, id=id)
+#     @action(methods=['get', 'delete',], detail=True)
+#     def subscriptions(self, request, id=None):
+#         recipe = get_object_or_404(Recipe, id=id)
