@@ -1,13 +1,13 @@
 from django.contrib import admin
-from recipes.models import Tags, Recipe
+from recipes.models import Tag, Recipe
 from import_export.admin import ImportExportModelAdmin
 from django.contrib import admin
 from .resource import ReportResourceIngredients, ReportResourceTags, ReportResourceRecipe, ReportResourceShoppingCart
-from .models import Ingredients, IngredientsAmount, ShoppingCart
+from .models import Ingredient, IngredientAmount, ShoppingCart
 
 
 class AmountInline(admin.TabularInline):
-    model = IngredientsAmount
+    model = IngredientAmount
     extra = 1
 
 
@@ -16,7 +16,7 @@ class IngredientsAdmin(ImportExportModelAdmin):
     search_fields = ("name",)
 
 
-admin.site.register(Ingredients, IngredientsAdmin)
+admin.site.register(Ingredient, IngredientsAdmin)
 
 
 class RecipeAdmin(ImportExportModelAdmin):
@@ -37,7 +37,7 @@ class RecipeAdmin(ImportExportModelAdmin):
 admin.site.register(Recipe, RecipeAdmin)
 
 
-@admin.register(Tags)
+@admin.register(Tag)
 class TagsAdmin(ImportExportModelAdmin):
     resource_class = ReportResourceTags
     list_display = (

@@ -6,7 +6,6 @@ from users.models import User, Follow
 class CustomUserAdmin(UserAdmin):
     list_display = (
         "username",
-        "role",
         "email",
         "first_name",
         "last_name",
@@ -23,6 +22,6 @@ admin.site.register(User, CustomUserAdmin)
 class FollowAdmin(admin.ModelAdmin):
     list_display = (
         'user',
-        'following',
+        'author',
 
     )

@@ -113,11 +113,10 @@ REST_FRAMEWORK = {'SEARCH_PARAM': 'name',
                   "DEFAULT_FILTER_BACKENDS": [
                       "django_filters.rest_framework.DjangoFilterBackend",
                   ],
-                  "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-                  "PAGE_SIZE": 10,
                   }
 DJOSER = {
     'LOGIN_FIELD': 'email',
+    'HIDE_USERS': False,
     'SERIALIZERS': {'user': 'api.serializers.UserSerializer',
                     'current_user': 'api.serializers.UserSerializer',
                     'user_create': 'api.serializers.UserSerializer',
@@ -126,7 +125,4 @@ DJOSER = {
 }
 CORS_ORIGIN_ALLOW_ALL = True
 AUTH_USER_MODEL = "users.User"
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000
+DATE_TIME_FORMAT = '%d/%m/%Y %H:%M'
