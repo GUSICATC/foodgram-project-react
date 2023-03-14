@@ -3,16 +3,21 @@ from recipes.models import Tags, Recipe
 from import_export.admin import ImportExportModelAdmin
 from django.contrib import admin
 from .resource import ReportResourceIngredients, ReportResourceTags, ReportResourceRecipe, ReportResourceShoppingCart
-from .models import Ingredients, IngredientsAmount, ShoppingCart
+from .models import Ingredients, IngredientAmount, ShoppingCart
 
 
 class AmountInline(admin.TabularInline):
-    model = IngredientsAmount
+    model = IngredientAmount
     extra = 1
 
 
 class IngredientsAdmin(ImportExportModelAdmin):
     resource_class = ReportResourceIngredients
+    list_display = (
+        'name',
+
+
+    )
     search_fields = ("name",)
 
 
@@ -30,7 +35,7 @@ class RecipeAdmin(ImportExportModelAdmin):
         'cooking_time',
 
     )
-    filter_horizontal = ('tags', )
+    filter_horizontal = ('tags', 'ingredients', )
     search_fields = ("author",)
 
 
@@ -46,10 +51,3 @@ class TagsAdmin(ImportExportModelAdmin):
         'slug',
     )
     search_fields = ("name",)
-
-
-# @admin.register(ShoppingCart)
-# class ShoppingCartAdmin(ImportExportModelAdmin):
-#     resource_class = ReportResourceShoppingCart
-#     filter_horizontal = ("users", 'recipes'),
-#     search_fields = ("users", 'recipes')
