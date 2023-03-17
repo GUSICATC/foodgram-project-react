@@ -7,8 +7,4 @@ class TagsFilter(FilterSet):
 
     class Meta:
         model = Recipe
-        fields = ('author', 'name',
-                  'is_favorited',
-                  'is_in_shopping_cart',
-                  'tags'
-                  )
+        fields = ("author", "name", "is_favorited", "is_in_shopping_cart", "tags")

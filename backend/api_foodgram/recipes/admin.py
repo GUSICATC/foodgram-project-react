@@ -1,9 +1,11 @@
 from recipes.models import Tag, Recipe
 from import_export.admin import ImportExportModelAdmin
 from django.contrib import admin
-from .resource import (ReportResourceIngredients,
-                       ReportResourceTags,
-                       ReportResourceRecipe)
+from .resource import (
+    ReportResourceIngredients,
+    ReportResourceTags,
+    ReportResourceRecipe,
+)
 from .models import Ingredient, IngredientAmount
 
 
@@ -22,16 +24,15 @@ admin.site.register(Ingredient, IngredientsAdmin)
 
 class RecipeAdmin(ImportExportModelAdmin):
     resource_class = ReportResourceRecipe
-    inlines = (AmountInline),
+    inlines = ((AmountInline),)
     list_display = (
-        'author',
-        'name',
-        'image',
-        'text',
-        'cooking_time',
-
+        "author",
+        "name",
+        "image",
+        "text",
+        "cooking_time",
     )
-    filter_horizontal = ('tags', )
+    filter_horizontal = ("tags",)
     search_fields = ("author",)
 
 
@@ -43,8 +44,8 @@ class TagsAdmin(ImportExportModelAdmin):
     resource_class = ReportResourceTags
     list_display = (
         "name",
-        'color',
-        'slug',
+        "color",
+        "slug",
     )
     search_fields = ("name",)
 

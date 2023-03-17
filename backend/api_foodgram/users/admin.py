@@ -21,7 +21,6 @@ admin.site.register(User, CustomUserAdmin)
 @admin.register(Follow)
 class FollowAdmin(admin.ModelAdmin):
     list_display = (
-        'user',
-        'author',
-
+        "user",
+        "author",
     )
