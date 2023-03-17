@@ -7,7 +7,7 @@ services:
     env_file:
       - ./.env
   backend:
-    build: ../backend/api_foodgram
+    image: gusic/api_foodgram
     restart: always
     volumes:
       - static_value:/app/static/
