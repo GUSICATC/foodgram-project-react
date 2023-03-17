@@ -16,10 +16,10 @@ class Hex2NameColor(serializers.Field):
         return value
 
     def to_internal_value(self, data):
-        # try:
-        #     data = webcolors.hex_to_name(data)
-        # except ValueError:
-        #     raise serializers.ValidationError("Для этого цвета нет имени")
+        try:
+            data = webcolors.hex_to_name(data)
+        except ValueError:
+            raise serializers.ValidationError("Для этого цвета нет имени")
         return data
 
 
