@@ -97,7 +97,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             shopping_list.append(
                 f'{ing["name"]}: {ing["amount"]} {ing["measurement"]}'
             )
-        shopping_list.append('\nПосчитано в Foodgram')
         shopping_list = '\n'.join(shopping_list)
         response = HttpResponse(
             shopping_list, content_type='text.txt; charset=utf-8'
