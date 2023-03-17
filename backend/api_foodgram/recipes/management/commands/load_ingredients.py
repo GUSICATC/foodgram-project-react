@@ -4,7 +4,6 @@ import os
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db.utils import IntegrityError
-
 from recipes.models import Ingredient
 
 DATA_ROOT = os.path.join(settings.BASE_DIR, "data")
@@ -18,9 +17,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            with open(
-                os.path.join(DATA_ROOT, options["filename"]), "r", encoding="utf-8"
-            ) as f:
+            with open(os.path.join(DATA_ROOT, options["filename"]), "r", encoding="utf-8") as f:
                 data = json.load(f)
                 for ingredient in data:
                     try:
@@ -30,9 +27,7 @@ class Command(BaseCommand):
                         )
                     except IntegrityError:
                         print(
-                            f'Ингридиет {ingredient["name"]} '
-                            f'{ingredient["measurement_unit"]} '
-                            f"уже есть в базе"
+                            f'Ингридиет {ingredient["name"]} ' f'{ingredient["measurement_unit"]} ' f"уже есть в базе"
                         )
 
         except FileNotFoundError:

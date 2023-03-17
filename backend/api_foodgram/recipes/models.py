@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
 from users.models import User
 
 MAX_LENGTH_FOR_CHARFIELD: int = 200
@@ -21,9 +21,7 @@ class Tag(models.Model):
         (YELLOW, "Желтый"),
     ]
     name = models.CharField(max_length=200, unique=True, verbose_name="Название тега")
-    color = models.CharField(
-        max_length=7, unique=True, choices=COLOR_CHOICES, verbose_name="Цвет в HEX"
-    )
+    color = models.CharField(max_length=7, unique=True, choices=COLOR_CHOICES, verbose_name="Цвет в HEX")
     slug = models.SlugField(max_length=200, unique=True, verbose_name="Уникальный слаг")
 
     class Meta:
@@ -38,19 +36,13 @@ class Tag(models.Model):
 class Ingredient(models.Model):
     name = models.CharField(max_length=200, verbose_name="Название ингредиента")
 
-    measurement_unit = models.CharField(
-        max_length=200, verbose_name="Единица измерения"
-    )
+    measurement_unit = models.CharField(max_length=200, verbose_name="Единица измерения")
 
     class Meta:
         ordering = ["-id"]
         verbose_name = "ингридиент"
         verbose_name_plural = "ингридиенты"
-        constraints = [
-            models.UniqueConstraint(
-                fields=["name", "measurement_unit"], name="unique ingredient"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["name", "measurement_unit"], name="unique ingredient")]
 
     def __str__(self):
         f"{self.name} {self.measurement_unit}"
@@ -123,9 +115,7 @@ class IngredientAmount(models.Model):
         verbose_name="Ингридиент",
     )
     amount = models.PositiveSmallIntegerField(
-        validators=(
-            MinValueValidator(1, message="Минимальное количество ингридиентов 1"),
-        ),
+        validators=(MinValueValidator(1, message="Минимальное количество ингридиентов 1"),),
         verbose_name="Количество",
     )
 
@@ -133,11 +123,7 @@ class IngredientAmount(models.Model):
         ordering = ["-id"]
         verbose_name = "Количество ингридиента"
         verbose_name_plural = "Количество ингридиентов"
-        constraints = [
-            models.UniqueConstraint(
-                fields=["ingredient", "recipe"], name="unique ingredients recipe"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["ingredient", "recipe"], name="unique ingredients recipe")]
 
     def __str__(self) -> str:
         return f"{self.amount} {self.ingredient}"
@@ -150,11 +136,7 @@ class ShoppingCart(models.Model):
         on_delete=models.CASCADE,
         related_name="in_carts",
     )
-    onstraints = [
-        models.UniqueConstraint(
-            fields=["user", "recipe"], name="unique ingredients recipe"
-        )
-    ]
+    onstraints = [models.UniqueConstraint(fields=["user", "recipe"], name="unique ingredients recipe")]
 
 
 class Favorit(models.Model):

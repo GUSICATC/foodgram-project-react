@@ -1,19 +1,13 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.validators import UniqueTogetherValidator
-import re
-from django.core.files.base import ContentFile
-import webcolors
 import base64
+import re
+
+import webcolors
+from django.core.files.base import ContentFile
+from django.shortcuts import get_object_or_404
+from recipes.models import Favorit, Ingredient, IngredientAmount, Recipe, ShoppingCart, Tag
 from rest_framework import serializers
-from users.models import User, Follow
-from recipes.models import (
-    Tag,
-    Recipe,
-    Ingredient,
-    IngredientAmount,
-    ShoppingCart,
-    Favorit,
-)
+from rest_framework.validators import UniqueTogetherValidator
+from users.models import Follow, User
 
 
 class Hex2NameColor(serializers.Field):
@@ -64,9 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_username(self, value):
         if re.fullmatch(r"^[\w.@+-]+\Z", value):
             return value
-        raise serializers.ValidationError(
-            "Невозможно создать пользователя с таким набором симвлолов"
-        )
+        raise serializers.ValidationError("Невозможно создать пользователя с таким набором симвлолов")
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -98,9 +90,7 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
             "amount",
         )
         validators = [
-            UniqueTogetherValidator(
-                queryset=IngredientAmount.objects.all(), fields=["ingredient", "recipe"]
-            )
+            UniqueTogetherValidator(queryset=IngredientAmount.objects.all(), fields=["ingredient", "recipe"])
         ]
 
 
@@ -133,46 +123,28 @@ class RecipeSerializer(serializers.ModelSerializer):
         )
 
     def get_is_favorited(self, obj):
-        if (
-            self.context.get("request") is None
-            or self.context.get("request").user.is_anonymous
-        ):
+        if self.context.get("request") is None or self.context.get("request").user.is_anonymous:
             return False
-        return Favorit.objects.filter(
-            recipe=obj, user=self.context.get("request").user
-        ).exists()
+        return Favorit.objects.filter(recipe=obj, user=self.context.get("request").user).exists()
 
     def get_is_in_shopping_cart(self, obj):
-        if (
-            self.context.get("request") is None
-            or self.context.get("request").user.is_anonymous
-        ):
+        if self.context.get("request") is None or self.context.get("request").user.is_anonymous:
             return False
-        return ShoppingCart.objects.filter(
-            recipe=obj, user=self.context.get("request").user
-        ).exists()
+        return ShoppingCart.objects.filter(recipe=obj, user=self.context.get("request").user).exists()
 
     def validate(self, data):
         ingredients = self.initial_data.get("ingredients")
         if not ingredients:
-            raise serializers.ValidationError(
-                {"ingredients": "Нужен хоть один ингридиент для рецепта"}
-            )
+            raise serializers.ValidationError({"ingredients": "Нужен хоть один ингридиент для рецепта"})
         ingredient_list = []
         for ingredient_item in ingredients:
             ingredient = get_object_or_404(Ingredient, id=ingredient_item["id"])
             if ingredient in ingredient_list:
-                raise serializers.ValidationError(
-                    "Ингридиенты должны " "быть уникальными"
-                )
+                raise serializers.ValidationError("Ингридиенты должны " "быть уникальными")
             ingredient_list.append(ingredient)
             if int(ingredient_item["amount"]) < 0:
                 raise serializers.ValidationError(
-                    {
-                        "ingredients": (
-                            "Убедитесь, что значение количества " "ингредиента больше 0"
-                        )
-                    }
+                    {"ingredients": ("Убедитесь, что значение количества " "ингредиента больше 0")}
                 )
         data["ingredients"] = ingredients
         return data
@@ -198,9 +170,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.image = validated_data.get("image", instance.image)
         instance.name = validated_data.get("name", instance.name)
         instance.text = validated_data.get("text", instance.text)
-        instance.cooking_time = validated_data.get(
-            "cooking_time", instance.cooking_time
-        )
+        instance.cooking_time = validated_data.get("cooking_time", instance.cooking_time)
         instance.tags.clear()
         tags_data = self.initial_data.get("tags")
         instance.tags.set(tags_data)
