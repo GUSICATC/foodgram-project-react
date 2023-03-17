@@ -12,16 +12,15 @@ from users.models import Follow, User
 
 
 class Hex2NameColor(serializers.Field):
-    pass
-    # def to_representation(self, value):
-    #     return value
+    def to_representation(self, value):
+        return value
 
-    # def to_internal_value(self, data):
-    #     try:
-    #         data = webcolors.hex_to_name(data)
-    #     except ValueError:
-    #         raise serializers.ValidationError("Для этого цвета нет имени")
-    #     return data
+    def to_internal_value(self, data):
+        try:
+            data = webcolors.hex_to_name(data)
+        except ValueError:
+            raise serializers.ValidationError("Для этого цвета нет имени")
+        return data
 
 
 class Base64ImageField(serializers.ImageField):
