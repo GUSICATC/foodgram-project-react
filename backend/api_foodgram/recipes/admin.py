@@ -1,11 +1,8 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from recipes.models import Ingredient, IngredientAmount, Recipe, Tag
-from recipes.resource import (
-    ReportResourceIngredients,
-    ReportResourceRecipe,
-    ReportResourceTags,
-)
+from recipes.resource import (ReportResourceIngredients, ReportResourceRecipe,
+                              ReportResourceTags)
 
 
 class AmountInline(admin.TabularInline):

@@ -4,14 +4,8 @@ import re
 import webcolors
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
-from recipes.models import (
-    Favorit,
-    Ingredient,
-    IngredientAmount,
-    Recipe,
-    ShoppingCart,
-    Tag,
-)
+from recipes.models import (Favorit, Ingredient, IngredientAmount, Recipe,
+                            ShoppingCart, Tag)
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from users.models import Follow, User
