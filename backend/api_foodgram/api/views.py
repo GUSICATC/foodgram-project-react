@@ -1,22 +1,23 @@
 from users.models import User, Follow
 from recipes.models import Tag, Recipe, Ingredient
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import (UserSerializer,
-                          TagSerializer,
-                          RecipeSerializer,
-                          IngredientSerializer, FollowSerializer)
+from rest_framework.permissions import IsAuthenticated
+from .serializers import (
+    TagSerializer,
+    RecipeSerializer,
+    IngredientSerializer,
+    FollowSerializer)
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets, filters, mixins
+from rest_framework import status, viewsets, filters
 from rest_framework.decorators import action
 from api.custom_filters import TagsFilter
 from api.pagination import LimitPageNumberPagination
 from api.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from djoser.views import UserViewSet
-from django.db.models import F, Q, QuerySet, Sum
+from django.db.models import F, Sum
 from django.http.response import HttpResponse
 from django.core.handlers.wsgi import WSGIRequest
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED
+from rest_framework.status import HTTP_400_BAD_REQUEST
 from api_foodgram.settings import DATE_TIME_FORMAT
 from datetime import datetime as dt
 
@@ -109,7 +110,8 @@ class SubscriptionsViewSet(UserViewSet):
     pagination_class = LimitPageNumberPagination
     queryset = User.objects.all()
 
-    @action(methods=['post'], detail=True, permission_classes=[IsAuthenticated,])
+    @action(methods=['post'], detail=True,
+            permission_classes=[IsAuthenticated,])
     def subscribe(self, request, id=None):
         user = request.user
         author = get_object_or_404(User, pk=id)

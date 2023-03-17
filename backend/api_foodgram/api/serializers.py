@@ -1,14 +1,17 @@
+from django.shortcuts import get_object_or_404
+from rest_framework.validators import UniqueTogetherValidator
+import re
+from django.core.files.base import ContentFile
+import webcolors
+import base64
 from rest_framework import serializers
 from users.models import User, Follow
-from recipes.models import Tag, Recipe, Ingredient, IngredientAmount, ShoppingCart, Favorit
-import base64
-import webcolors
-from django.core.files.base import ContentFile
-import re
-from rest_framework.validators import UniqueTogetherValidator
-
-
-from django.shortcuts import get_object_or_404
+from recipes.models import (Tag,
+                            Recipe,
+                            Ingredient,
+                            IngredientAmount,
+                            ShoppingCart,
+                            Favorit)
 
 
 class Hex2NameColor(serializers.Field):

@@ -77,14 +77,20 @@ class Recipe(models.Model):
                                   related_name='recipes',
                                   verbose_name='Тег',
                                   )
-    cooking_time = models.IntegerField('Время приготовления (в минутах)', default=1,
-                                       validators=(
-                                           MinValueValidator(1, message='Минимальное время приготовления 1 минута'),),)
+    cooking_time = models.IntegerField(
+        'Время приготовления (в минутах)',
+        default=1,
+        validators=(
+            MinValueValidator(
+                1,
+                message=('Минимальное время приготовления 1 минута'),),))
 
     is_favorited = models.ManyToManyField(
-        User, through='Favorit', related_name="favorited", default=None, blank=True,)
+        User, through='Favorit', related_name="favorited", default=None,
+        blank=True,)
     is_in_shopping_cart = models.ManyToManyField(
-        User, through='ShoppingCart', related_name="in_shopping_cart", default=None, blank=True,)
+        User, through='ShoppingCart', related_name="in_shopping_cart",
+        default=None, blank=True,)
 
     class Meta:
         ordering = ['-id']
@@ -98,7 +104,8 @@ class Recipe(models.Model):
 class IngredientAmount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, related_name='recipe',verbose_name='Ингридиент',)
+        Ingredient, on_delete=models.CASCADE, related_name='recipe',
+        verbose_name='Ингридиент',)
     amount = models.PositiveSmallIntegerField(validators=(
         MinValueValidator(
             1, message='Минимальное количество ингридиентов 1'),),
@@ -112,8 +119,10 @@ class IngredientAmount(models.Model):
             models.UniqueConstraint(fields=['ingredient', 'recipe'],
                                     name='unique ingredients recipe')
         ]
+
     def __str__(self) -> str:
         return f'{self.amount} {self.ingredient}'
+
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
@@ -134,6 +143,7 @@ class Favorit(models.Model):
                                related_name='favorites',
                                verbose_name='Рецепт',
                                )
+
     class Meta:
         verbose_name = 'Избранный рецепт'
         verbose_name_plural = 'Избранные рецепты'
