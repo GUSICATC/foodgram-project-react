@@ -17,7 +17,12 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from users.models import Follow, User
 
-from .serializers import FollowSerializer, IngredientSerializer, RecipeSerializer, TagSerializer
+from .serializers import (
+    FollowSerializer,
+    IngredientSerializer,
+    RecipeSerializer,
+    TagSerializer,
+)
 
 
 class IngredientsViewSet(viewsets.ModelViewSet):
@@ -91,7 +96,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(status=HTTP_400_BAD_REQUEST)
 
         filename = f"{user.username}_shopping_list.txt"
-        shopping_list = [f"Список покупок для:\n\n{user.first_name}\n" f"{dt.now().strftime(DATE_TIME_FORMAT)}\n"]
+        shopping_list = [
+            f"Список покупок для:\n\n{user.first_name}\n"
+            f"{dt.now().strftime(DATE_TIME_FORMAT)}\n"
+        ]
 
         ingredients = (
             Ingredient.objects.filter(recipe__recipe__in_carts__user=user)
@@ -100,9 +108,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
         for ing in ingredients:
-            shopping_list.append(f'{ing["name"]}: {ing["amount"]} {ing["measurement"]}')
+            shopping_list.append(
+                f'{ing["name"]}: {ing["amount"]} {ing["measurement"]}'
+            )
         shopping_list = "\n".join(shopping_list)
-        response = HttpResponse(shopping_list, content_type="text.txt; charset=utf-8")
+        response = HttpResponse(
+            shopping_list, content_type="text.txt; charset=utf-8"
+        )
         response["Content-Disposition"] = f"attachment; filename={filename}"
         return response
 
@@ -151,7 +163,9 @@ class SubscriptionsViewSet(UserViewSet):
             follow.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response({"errors": "Вы уже отписались"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"errors": "Вы уже отписались"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     @action(
         detail=False,
@@ -163,5 +177,7 @@ class SubscriptionsViewSet(UserViewSet):
         user = request.user
         queryset = Follow.objects.filter(user=user)
         pages = self.paginate_queryset(queryset)
-        serializer = FollowSerializer(pages, many=True, context={"request": request})
+        serializer = FollowSerializer(
+            pages, many=True, context={"request": request}
+        )
         return self.get_paginated_response(serializer.data)

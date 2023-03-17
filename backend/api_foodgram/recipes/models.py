@@ -20,9 +20,18 @@ class Tag(models.Model):
         (PURPLE, "Фиолетовый"),
         (YELLOW, "Желтый"),
     ]
-    name = models.CharField(max_length=200, unique=True, verbose_name="Название тега")
-    color = models.CharField(max_length=7, unique=True, choices=COLOR_CHOICES, verbose_name="Цвет в HEX")
-    slug = models.SlugField(max_length=200, unique=True, verbose_name="Уникальный слаг")
+    name = models.CharField(
+        max_length=200, unique=True, verbose_name="Название тега"
+    )
+    color = models.CharField(
+        max_length=7,
+        unique=True,
+        choices=COLOR_CHOICES,
+        verbose_name="Цвет в HEX",
+    )
+    slug = models.SlugField(
+        max_length=200, unique=True, verbose_name="Уникальный слаг"
+    )
 
     class Meta:
         ordering = ["-id"]
@@ -34,15 +43,23 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=200, verbose_name="Название ингредиента")
+    name = models.CharField(
+        max_length=200, verbose_name="Название ингредиента"
+    )
 
-    measurement_unit = models.CharField(max_length=200, verbose_name="Единица измерения")
+    measurement_unit = models.CharField(
+        max_length=200, verbose_name="Единица измерения"
+    )
 
     class Meta:
         ordering = ["-id"]
         verbose_name = "ингридиент"
         verbose_name_plural = "ингридиенты"
-        constraints = [models.UniqueConstraint(fields=["name", "measurement_unit"], name="unique ingredient")]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name", "measurement_unit"], name="unique ingredient"
+            )
+        ]
 
     def __str__(self):
         f"{self.name} {self.measurement_unit}"
@@ -57,9 +74,13 @@ class Recipe(models.Model):
     )
     name = models.CharField(max_length=200, verbose_name="Название рецепта")
 
-    image = models.ImageField(upload_to="recipes/", verbose_name="Картинка рецепта")
+    image = models.ImageField(
+        upload_to="recipes/", verbose_name="Картинка рецепта"
+    )
 
-    text = models.TextField(verbose_name="Описание рецепта", help_text="Описание")
+    text = models.TextField(
+        verbose_name="Описание рецепта", help_text="Описание"
+    )
     ingredients = models.ManyToManyField(
         Ingredient,
         through="IngredientAmount",
@@ -115,7 +136,11 @@ class IngredientAmount(models.Model):
         verbose_name="Ингридиент",
     )
     amount = models.PositiveSmallIntegerField(
-        validators=(MinValueValidator(1, message="Минимальное количество ингридиентов 1"),),
+        validators=(
+            MinValueValidator(
+                1, message="Минимальное количество ингридиентов 1"
+            ),
+        ),
         verbose_name="Количество",
     )
 
@@ -123,20 +148,31 @@ class IngredientAmount(models.Model):
         ordering = ["-id"]
         verbose_name = "Количество ингридиента"
         verbose_name_plural = "Количество ингридиентов"
-        constraints = [models.UniqueConstraint(fields=["ingredient", "recipe"], name="unique ingredients recipe")]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["ingredient", "recipe"],
+                name="unique ingredients recipe",
+            )
+        ]
 
     def __str__(self) -> str:
         return f"{self.amount} {self.ingredient}"
 
 
 class ShoppingCart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="carts")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="carts"
+    )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name="in_carts",
     )
-    onstraints = [models.UniqueConstraint(fields=["user", "recipe"], name="unique ingredients recipe")]
+    onstraints = [
+        models.UniqueConstraint(
+            fields=["user", "recipe"], name="unique ingredients recipe"
+        )
+    ]
 
 
 class Favorit(models.Model):
