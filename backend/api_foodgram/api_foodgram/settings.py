@@ -126,8 +126,6 @@ DJOSER = {
         "user_create": "api.serializers.UserSerializer",
     },
 }
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000', 'http://localhost',
-]
+CORS_ALLOWED_ALL = True
 AUTH_USER_MODEL = "users.User"
 DATE_TIME_FORMAT = "%d/%m/%Y %H:%M"
