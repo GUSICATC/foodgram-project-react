@@ -3,6 +3,12 @@ from datetime import datetime as dt
 from api.custom_filters import TagsFilter
 from api.pagination import LimitPageNumberPagination
 from api.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
+from api.serializers import (
+    FollowSerializer,
+    IngredientSerializer,
+    RecipeSerializer,
+    TagSerializer,
+)
 from api_foodgram.settings import DATE_TIME_FORMAT
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import F, Sum
@@ -16,13 +22,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from users.models import Follow, User
-
-from .serializers import (
-    FollowSerializer,
-    IngredientSerializer,
-    RecipeSerializer,
-    TagSerializer,
-)
 
 
 class IngredientsViewSet(viewsets.ModelViewSet):
