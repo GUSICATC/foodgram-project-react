@@ -127,7 +127,7 @@ DJOSER = {
     },
 }
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    'http://localhost:3000', 'http://localhost',
 ]
 AUTH_USER_MODEL = "users.User"
 DATE_TIME_FORMAT = "%d/%m/%Y %H:%M"
