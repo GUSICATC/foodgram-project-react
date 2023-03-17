@@ -14,7 +14,9 @@ class User(AbstractUser):
         unique=True,
         verbose_name="Емаил",
     )
-    first_name = models.CharField(max_length=150, verbose_name="Имя", blank=True, null=True)
+    first_name = models.CharField(
+        max_length=150, verbose_name="Имя", blank=True, null=True
+    )
     last_name = models.CharField(
         max_length=150,
         verbose_name="Фамилия",
