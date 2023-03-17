@@ -2,12 +2,11 @@
 
 # Учебный проект #
 
-![workflow](https://github.com/GUSICATC/
-foodgram-project-react/actions/workflows/foodgram_ workflow/badge.svg)
+![workflow](https://github.com/GUSICATC/foodgram-project-react/actions/workflows/foodgram_workflow/badge.svg)
 
 Проект доступен по ip:
 ```
-51.250.17.34/api/v1/
+51.250.17.34/api/
 ```
 Redoc проекта доступен по адресу:
 ```
