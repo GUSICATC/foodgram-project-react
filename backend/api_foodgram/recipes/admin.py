@@ -47,10 +47,3 @@ class TagsAdmin(ImportExportModelAdmin):
         "slug",
     )
     search_fields = ("name",)
-
-
-# @admin.register(ShoppingCart)
-# class ShoppingCartAdmin(ImportExportModelAdmin):
-#     resource_class = ReportResourceShoppingCart
-#     filter_horizontal = ("users", 'recipes'),
-#     search_fields = ("users", 'recipes')
