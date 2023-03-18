@@ -102,7 +102,9 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 MEDIA_URL = "/media/"
+
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 REST_FRAMEWORK = {
@@ -126,6 +128,10 @@ DJOSER = {
         "user_create": "api.serializers.UserSerializer",
     },
 }
-CORS_ALLOWED_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
+
 AUTH_USER_MODEL = "users.User"
+
 DATE_TIME_FORMAT = "%d/%m/%Y %H:%M"
