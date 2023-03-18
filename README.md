@@ -16,6 +16,7 @@ Frontend доступен по ip:
 ```
 username: admin
 password: admin
+email: admin@yandex.ru
 ```
 
 
@@ -51,7 +52,7 @@ $sudo docker-compose exec web python manage.py makemigrations
 $sudo docker-compose exec web python manage.py migrate
 $sudo docker-compose exec web python manage.py collectstatic --no-input
 $sudo docker-compose exec web python manage.py createsuperuser
-$sudo docker-compose exec web python manage.py loaddata ingredients.json
+$sudo docker-compose exec web python load_ingredients ingredients.csv
 ```
 - Либо выполнить команду "make" из каталога infra, для автоматического 
 выполнения команд миграций и создания супер пользователя:
