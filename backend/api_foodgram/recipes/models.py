@@ -177,8 +177,10 @@ class ShoppingCart(models.Model):
                 fields=["user", "recipe"], name="unique shopping chart"
             )
         ]
+
     def __str__(self):
         return f"{self.user} {self.recipe}"
+
 
 class Favorit(models.Model):
     user = models.ForeignKey(
