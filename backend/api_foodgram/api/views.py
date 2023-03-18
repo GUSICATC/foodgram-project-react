@@ -48,7 +48,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         methods=[
-            "post",
+            "get",
             "delete",
         ],
         detail=True,
