@@ -171,9 +171,9 @@ class ShoppingCart(models.Model):
 
     class Meta:
         verbose_name = "Корзина"
-        onstraints = [
+        constraints = [
             models.UniqueConstraint(
-                fields=["user", "recipe"], name="unique ingredients recipe"
+                fields=["user", "recipe"], name="unique shopping chart"
             )
         ]
 
