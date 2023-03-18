@@ -168,11 +168,14 @@ class ShoppingCart(models.Model):
         on_delete=models.CASCADE,
         related_name="in_carts",
     )
-    onstraints = [
-        models.UniqueConstraint(
-            fields=["user", "recipe"], name="unique ingredients recipe"
-        )
-    ]
+
+    class Meta:
+        verbose_name = "Корзина"
+        onstraints = [
+            models.UniqueConstraint(
+                fields=["user", "recipe"], name="unique ingredients recipe"
+            )
+        ]
 
 
 class Favorit(models.Model):
