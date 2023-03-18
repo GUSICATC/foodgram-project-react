@@ -48,11 +48,11 @@ $scp -r -i <path-to-ssh-key> infra/nginx/ <servername>@<ip>:/home/<username>/
 
 - На сервере создать супер пользователя  и выполнить миграции:
 ```python
-$sudo docker-compose exec web python manage.py makemigrations
-$sudo docker-compose exec web python manage.py migrate
-$sudo docker-compose exec web python manage.py collectstatic --no-input
-$sudo docker-compose exec web python manage.py createsuperuser
-$sudo docker-compose exec web python load_ingredients ingredients.csv
+$sudo docker-compose exec backend python manage.py makemigrations
+$sudo docker-compose exec backend python manage.py migrate
+$sudo docker-compose exec backend python manage.py collectstatic --no-input
+$sudo docker-compose exec backend python manage.py createsuperuser
+$sudo docker-compose exec backend python load_ingredients
 ```
 - Либо выполнить команду "make" из каталога infra, для автоматического 
 выполнения команд миграций и создания супер пользователя:
