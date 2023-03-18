@@ -11,7 +11,7 @@ from django.db.models import F, Sum
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
-from recipes.models import Ingredient, Recipe, Tag
+from recipes.models import Favorit, Ingredient, Recipe, ShoppingCart, Tag
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -54,35 +54,23 @@ class RecipeViewSet(viewsets.ModelViewSet):
         detail=True,
     )
     def favorite(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, pk=pk)
-
-        if request.method == "POST":
-            if recipe.is_favorited.filter(id=request.user.id).exists():
-                return Response({"ошибка рицепт уже в избранном"})
-            recipe.is_favorited.add(request.user)
-            return Response({"добавлен в избранное"})
-
-        recipe.is_favorited.remove(request.user)
-        return Response({"удален из избранного"})
+        if request.method == "GET":
+            return self.add_obj(Favorit, request.user, pk)
+        elif request.method == "DELETE":
+            return self.delete_obj(Favorit, request.user, pk)
+        return None
 
     @action(
-        methods=[
-            "post",
-            "delete",
-        ],
         detail=True,
+        methods=["get", "delete"],
+        permission_classes=[IsAuthenticated],
     )
     def shopping_cart(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, pk=pk)
-
-        if request.method == "POST":
-            if recipe.is_in_shopping_cart.filter(id=request.user.id).exists():
-                return Response({"ошибка рицепт уже в корзине"})
-            recipe.is_in_shopping_cart.add(request.user)
-            return Response({"добавлен в корзину"})
-
-        recipe.is_in_shopping_cart.remove(request.user)
-        return Response({"удален из корзины"})
+        if request.method == "GET":
+            return self.add_obj(ShoppingCart, request.user, pk)
+        elif request.method == "DELETE":
+            return self.delete_obj(ShoppingCart, request.user, pk)
+        return None
 
     @action(methods=("get",), detail=False)
     def download_shopping_cart(self, request: WSGIRequest):
