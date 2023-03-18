@@ -48,8 +48,7 @@ class TagsAdmin(ImportExportModelAdmin):
 
 
 @admin.register(ShoppingCart)
-class TagsAdmin(admin.ModelAdmin):
-    resource_class = ReportResourceTags
+class ShoppingCartAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "recipe",
