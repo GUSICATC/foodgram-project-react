@@ -2,7 +2,7 @@
 
 ## Учебный проект ##
 
-![workflow](https://github.com/GUSICATC/foodgram-project-react/actions/workflows/foodgram_workflow/badge.svg)
+![workflow](https://github.com/GUSICATC/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 
 Проект доступен по ip:
 ```
