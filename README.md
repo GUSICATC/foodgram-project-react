@@ -1,6 +1,6 @@
-# Foodgram 
+## Foodgram ##
 
-# Учебный проект #
+## Учебный проект ##
 
 ![workflow](https://github.com/GUSICATC/foodgram-project-react/actions/workflows/foodgram_workflow/badge.svg)
 
@@ -8,10 +8,16 @@
 ```
 158.160.30.63/api/
 ```
-Redoc проекта доступен по адресу:
+Frontend доступен по ip:
 ```
-158.160.30.63/redoc/
+158.160.30.63
 ```
+Для теста admin панели используйте:
+```
+username: admin
+password: admin
+```
+
 
 ## Описание ##
 
@@ -24,7 +30,8 @@ Foodgram - онлайн-сервис и API для него. На этом се�
  - Python 
  - Django  
  - Docker
- - Git Action 
+ - Git Action
+ - React 
 
 ## Запуск проекта ##
 - Установить на сервер docker и docker-compose
@@ -44,4 +51,12 @@ $sudo docker-compose exec web python manage.py makemigrations
 $sudo docker-compose exec web python manage.py migrate
 $sudo docker-compose exec web python manage.py collectstatic --no-input
 $sudo docker-compose exec web python manage.py createsuperuser
+$sudo docker-compose exec web python manage.py loaddata ingredients.json
+```
+- Либо выполнить команду "make" из каталога infra, для автоматического 
+выполнения команд миграций и создания супер пользователя:
+```python
+$ sudo apt install make
+$ cd ../infra
+$ make
 ```

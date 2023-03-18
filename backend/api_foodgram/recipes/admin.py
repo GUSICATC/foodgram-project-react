@@ -1,6 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from recipes.models import Ingredient, IngredientAmount, Recipe, Tag
+from recipes.models import (Ingredient, IngredientAmount, Recipe, ShoppingCart,
+                            Tag)
 from recipes.resource import (ReportResourceIngredients, ReportResourceRecipe,
                               ReportResourceTags)
 
@@ -44,3 +45,12 @@ class TagsAdmin(ImportExportModelAdmin):
         "slug",
     )
     search_fields = ("name",)
+
+
+@admin.register(ShoppingCart)
+class TagsAdmin(admin.ModelAdmin):
+    resource_class = ReportResourceTags
+    list_display = (
+        "user",
+        "recipe",
+    )
