@@ -1,18 +1,9 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from recipes.models import (
-    Favorit,
-    Ingredient,
-    IngredientAmount,
-    Recipe,
-    ShoppingCart,
-    Tag,
-)
-from recipes.resource import (
-    ReportResourceIngredients,
-    ReportResourceRecipe,
-    ReportResourceTags,
-)
+from recipes.models import (Favorit, Ingredient, IngredientAmount, Recipe,
+                            ShoppingCart, Tag)
+from recipes.resource import (ReportResourceIngredients, ReportResourceRecipe,
+                              ReportResourceTags)
 
 
 class AmountInline(admin.TabularInline):
@@ -65,7 +56,7 @@ class ShoppingCartAdmin(admin.ModelAdmin):
 
 
 @admin.register(Favorit)
-class ShoppingCartAdmin(admin.ModelAdmin):
+class FavoritAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "recipe",
