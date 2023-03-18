@@ -57,9 +57,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def favorite(self, request, pk=None):
         if request.method == "POST":
             return self.add_obj(Favorit, request.user, pk)
-        elif request.method == "DELETE":
-            return self.delete_obj(Favorit, request.user, pk)
-        return None
+        return self.delete_obj(Favorit, request.user, pk)
 
     @action(
         detail=True,
@@ -69,9 +67,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def shopping_cart(self, request, pk=None):
         if request.method == "POST":
             return self.add_obj(ShoppingCart, request.user, pk)
-        elif request.method == "DELETE":
-            return self.delete_obj(ShoppingCart, request.user, pk)
-        return None
+        return self.delete_obj(ShoppingCart, request.user, pk)
 
     @action(methods=("get",), detail=False)
     def download_shopping_cart(self, request: WSGIRequest):
