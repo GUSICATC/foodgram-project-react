@@ -59,5 +59,5 @@ $sudo docker-compose exec web python load_ingredients ingredients.csv
 ```python
 $ sudo apt install make
 $ cd ../infra
-$ make
+$ make 
 ```
