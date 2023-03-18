@@ -171,12 +171,14 @@ class ShoppingCart(models.Model):
 
     class Meta:
         verbose_name = "Корзина"
+        verbose_name_plural = "Корзина"
         constraints = [
             models.UniqueConstraint(
                 fields=["user", "recipe"], name="unique shopping chart"
             )
         ]
-
+    def __str__(self):
+        return f"{self.user} {self.recipe}"
 
 class Favorit(models.Model):
     user = models.ForeignKey(
