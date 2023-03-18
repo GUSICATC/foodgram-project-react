@@ -1,10 +1,11 @@
 from datetime import datetime as dt
 
-from api.custom_filters import TagsFilter
+from api.custom_filters import AuthorAndTagFilter
 from api.pagination import LimitPageNumberPagination
 from api.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
-from api.serializers import (FollowSerializer, IngredientSerializer,
-                             RecipeSerializer, TagSerializer)
+from api.serializers import (ChartRecipeSerializer, FollowSerializer,
+                             IngredientSerializer, RecipeSerializer,
+                             TagSerializer)
 from api_foodgram.settings import DATE_TIME_FORMAT
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import F, Sum
@@ -41,20 +42,20 @@ class RecipeViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeSerializer
     pagination_class = LimitPageNumberPagination
     permission_classes = (IsOwnerOrReadOnly,)
-    filterset_class = TagsFilter
+    filterset_class = AuthorAndTagFilter
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
     @action(
         methods=[
-            "get",
+            "post",
             "delete",
         ],
         detail=True,
     )
     def favorite(self, request, pk=None):
-        if request.method == "GET":
+        if request.method == "POST":
             return self.add_obj(Favorit, request.user, pk)
         elif request.method == "DELETE":
             return self.delete_obj(Favorit, request.user, pk)
@@ -62,11 +63,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=True,
-        methods=["get", "delete"],
+        methods=["post", "delete"],
         permission_classes=[IsAuthenticated],
     )
     def shopping_cart(self, request, pk=None):
-        if request.method == "GET":
+        if request.method == "POST":
             return self.add_obj(ShoppingCart, request.user, pk)
         elif request.method == "DELETE":
             return self.delete_obj(ShoppingCart, request.user, pk)
@@ -100,6 +101,26 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
         response["Content-Disposition"] = f"attachment; filename={filename}"
         return response
+
+    def add_obj(self, model, user, pk):
+        if model.objects.filter(user=user, recipe__id=pk).exists():
+            return Response(
+                {"errors": "Рецепт уже добавлен в список"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        recipe = get_object_or_404(Recipe, id=pk)
+        model.objects.create(user=user, recipe=recipe)
+        serializer = ChartRecipeSerializer(recipe)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def delete_obj(self, model, user, pk):
+        obj = model.objects.filter(user=user, recipe__id=pk)
+        if obj.exists():
+            obj.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"errors": "Рецепт уже удален"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class SubscriptionsViewSet(UserViewSet):

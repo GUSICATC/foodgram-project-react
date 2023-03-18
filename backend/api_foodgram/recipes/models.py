@@ -103,21 +103,6 @@ class Recipe(models.Model):
         ),
     )
 
-    is_favorited = models.ManyToManyField(
-        User,
-        through="Favorit",
-        related_name="favorited",
-        default=None,
-        blank=True,
-    )
-    is_in_shopping_cart = models.ManyToManyField(
-        User,
-        through="ShoppingCart",
-        related_name="in_shopping_cart",
-        default=None,
-        blank=True,
-    )
-
     class Meta:
         ordering = ["-id"]
         verbose_name = "Рецепт"
