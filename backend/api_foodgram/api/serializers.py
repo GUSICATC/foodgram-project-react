@@ -246,15 +246,15 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_is_subscribed(self, obj):
         return Follow.objects.filter(user=obj.user, author=obj.author).exists()
 
-    def get_recipes(self, obj):
-        request = self.context.get("request")
-        limit = request.GET.get("recipes_limit")
-        author = User.objects.get(username=obj.author)
-        queryset = author.recipe.all()
-        if limit:
-            queryset = queryset[: int(limit)]
-        return ChartRecipeSerializer(queryset, many=True).data
+    # def get_recipes(self, obj):
+    #     request = self.context.get("request")
+    #     limit = request.GET.get("recipes_limit")
+    #     author = User.objects.get(username=obj.author)
+    #     queryset = author.recipe.all()
+    #     if limit:
+    #         queryset = queryset[: int(limit)]
+    #     return ChartRecipeSerializer(queryset, many=True).data
 
-    def get_recipes_count(self, obj):
-        author = User.objects.get(username=obj.author)
-        return author.recipe.count()
+    # def get_recipes_count(self, obj):
+    #     author = User.objects.get(username=obj.author)
+    #     return author.recipe.count()
