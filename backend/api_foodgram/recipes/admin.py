@@ -9,6 +9,7 @@ from recipes.resource import (ReportResourceIngredients, ReportResourceRecipe,
 class AmountInline(admin.TabularInline):
     model = IngredientAmount
     extra = 1
+    min_num = 1
 
 
 class IngredientsAdmin(ImportExportModelAdmin):
