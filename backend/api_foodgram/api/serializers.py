@@ -156,7 +156,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"ingredients": "Нужен хоть один ингридиент для рецепта"}
             )
-        ingredient_list = []
+        ingredient_list = set()
         for ingredient_item in ingredients:
             ingredient = get_object_or_404(
                 Ingredient, id=ingredient_item["id"]
@@ -165,7 +165,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     "Ингридиенты должны " "быть уникальными"
                 )
-            ingredient_list.append(ingredient)
+            ingredient_list.add(ingredient)
             if int(ingredient_item["amount"]) < 0:
                 raise serializers.ValidationError(
                     {
@@ -180,11 +180,11 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            IngredientAmount.objects.create(
+            IngredientAmount.objects.bulk_create([IngredientAmount(
                 recipe=recipe,
                 ingredient_id=ingredient.get("id"),
                 amount=ingredient.get("amount"),
-            )
+            )])
 
     def create(self, validated_data):
         image = validated_data.pop("image")
