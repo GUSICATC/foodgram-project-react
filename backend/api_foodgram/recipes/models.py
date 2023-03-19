@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from users.models import User
 
@@ -100,6 +100,9 @@ class Recipe(models.Model):
                 1,
                 message=("Минимальное время приготовления 1 минута"),
             ),
+            MaxValueValidator(
+                120, message="Максимальное время приготовления 120 минут"
+            ),
         ),
     )
 
@@ -124,6 +127,9 @@ class IngredientAmount(models.Model):
         validators=(
             MinValueValidator(
                 1, message="Минимальное количество ингридиентов 1"
+            ),
+            MaxValueValidator(
+                50, message="Максимальное количество ингридиентов 50"
             ),
         ),
         verbose_name="Количество",
@@ -155,6 +161,7 @@ class ShoppingCart(models.Model):
     )
 
     class Meta:
+        ordering = ["-id"]
         verbose_name = "Корзина"
         verbose_name_plural = "Корзина"
         constraints = [
@@ -181,6 +188,7 @@ class Favorit(models.Model):
     )
 
     class Meta:
+        ordering = ["-id"]
         verbose_name = "Избранный рецепт"
         verbose_name_plural = "Избранные рецепты"
         constraints = (
