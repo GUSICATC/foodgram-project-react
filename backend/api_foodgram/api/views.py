@@ -3,9 +3,13 @@ from datetime import datetime as dt
 from api.custom_filters import AuthorAndTagFilter
 from api.pagination import LimitPageNumberPagination
 from api.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
-from api.serializers import (ChartRecipeSerializer, FollowSerializer,
-                             IngredientSerializer, RecipeSerializer,
-                             TagSerializer)
+from api.serializers import (
+    ChartRecipeSerializer,
+    FollowSerializer,
+    IngredientSerializer,
+    RecipeSerializer,
+    TagSerializer,
+)
 from api_foodgram.settings import DATE_TIME_FORMAT
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import F, Sum
