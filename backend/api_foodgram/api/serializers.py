@@ -70,6 +70,12 @@ class UserSerializer(serializers.ModelSerializer):
     def get_is_subscribed(self, obj):
         return Follow.objects.filter(user=obj.user, author=obj.author).exists()
 
+    def get_is_subscribed(self, obj):
+        user = self.context.get('request').user
+        if user.is_anonymous:
+            return False
+        return Follow.objects.filter(user=user, author=obj.id).exists()
+
 
 class TagSerializer(serializers.ModelSerializer):
     color = Hex2NameColor()
