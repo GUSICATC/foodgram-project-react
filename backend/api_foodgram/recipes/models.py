@@ -1,5 +1,6 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
 from users.models import User
 
 MAX_LENGTH_FOR_CHARFIELD: int = 200
@@ -101,7 +102,7 @@ class Recipe(models.Model):
                 message=("Минимальное время приготовления 1 минута"),
             ),
             MaxValueValidator(
-                120, message="Максимальное время приготовления 120 минут"
+                1440, message="Максимальное время приготовления 1440 минут"
             ),
         ),
     )
@@ -129,7 +130,7 @@ class IngredientAmount(models.Model):
                 1, message="Минимальное количество ингридиентов 1"
             ),
             MaxValueValidator(
-                50, message="Максимальное количество ингридиентов 50"
+                1500, message="Максимальное количество ингридиентов 1500"
             ),
         ),
         verbose_name="Количество",

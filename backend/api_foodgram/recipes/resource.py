@@ -1,6 +1,6 @@
 from import_export import resources
 
-from .models import Ingredient, Recipe, ShoppingCart, Tag
+from recipes.models import Ingredient, Recipe, ShoppingCart, Tag
 
 
 class ReportResourceIngredients(resources.ModelResource):

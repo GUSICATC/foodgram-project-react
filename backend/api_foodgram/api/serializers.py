@@ -1,13 +1,14 @@
 import base64
 import re
-
 import webcolors
+
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
+from rest_framework.validators import UniqueTogetherValidator
+from rest_framework import serializers
+
 from recipes.models import (Favorit, Ingredient, IngredientAmount, Recipe,
                             ShoppingCart, Tag)
-from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 from users.models import Follow, User
 
 
@@ -179,16 +180,16 @@ class RecipeSerializer(serializers.ModelSerializer):
         return data
 
     def create_ingredients(self, ingredients, recipe):
+        ingredients_to_create = []
         for ingredient in ingredients:
-            IngredientAmount.objects.bulk_create(
-                [
-                    IngredientAmount(
-                        recipe=recipe,
-                        ingredient_id=ingredient.get("id"),
-                        amount=ingredient.get("amount"),
-                    )
-                ]
+            ingredients_to_create.append(
+                IngredientAmount(
+                    recipe=recipe,
+                    ingredient_id=ingredient.get("id"),
+                    amount=ingredient.get("amount"),
+                )
             )
+        IngredientAmount.objects.bulk_create(ingredients_to_create)
 
     def create(self, validated_data):
         image = validated_data.pop("image")
@@ -260,5 +261,4 @@ class FollowSerializer(serializers.ModelSerializer):
         return ChartRecipeSerializer(queryset, many=True).data
 
     def get_recipes_count(self, obj):
-        author = User.objects.get(username=obj.author)
-        return author.recipe.count()
+        return obj.author.recipe.count()
