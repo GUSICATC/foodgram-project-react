@@ -34,6 +34,8 @@ class Base64ImageField(serializers.ImageField):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    is_subscribed = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = (
@@ -42,6 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "is_subscribed",
             "password",
         )
         extra_kwargs = {"password": {"write_only": True}}
@@ -63,6 +66,9 @@ class UserSerializer(serializers.ModelSerializer):
         raise serializers.ValidationError(
             "Невозможно создать пользователя с таким набором симвлолов"
         )
+
+    def get_is_subscribed(self, obj):
+        return Follow.objects.filter(user=obj.user, author=obj.author).exists()
 
 
 class TagSerializer(serializers.ModelSerializer):
