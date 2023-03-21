@@ -4,11 +4,16 @@ import re
 import webcolors
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
+from recipes.models import (
+    Favorit,
+    Ingredient,
+    IngredientAmount,
+    Recipe,
+    ShoppingCart,
+    Tag,
+)
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-
-from recipes.models import (Favorit, Ingredient, IngredientAmount, Recipe,
-                            ShoppingCart, Tag)
 from users.models import Follow, User
 
 
@@ -68,7 +73,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def get_is_subscribed(self, obj):
-        user = self.context.get('request').user
+        user = self.context.get("request").user
         if user.is_anonymous:
             return False
         return Follow.objects.filter(user=user, author=obj.id).exists()
