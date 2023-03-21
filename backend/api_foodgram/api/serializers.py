@@ -1,11 +1,11 @@
 import base64
 import re
-import webcolors
 
+import webcolors
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
-from rest_framework.validators import UniqueTogetherValidator
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from recipes.models import (Favorit, Ingredient, IngredientAmount, Recipe,
                             ShoppingCart, Tag)
