@@ -176,18 +176,6 @@ class RecipeSerializer(serializers.ModelSerializer):
                     "Ингридиенты должны " "быть уникальными"
                 )
             ingredient_list.add(ingredient)
-            if (
-                int(ingredient_item["amount"]) < 0
-                or int(ingredient_item["amount"]) > 1500
-            ):
-                raise serializers.ValidationError(
-                    {
-                        "ingredients": (
-                            "Убедитесь, что значение количества "
-                            "ингредиента в пределах от 0 до 1500"
-                        )
-                    }
-                )
         data["ingredients"] = ingredients
         return data
 
