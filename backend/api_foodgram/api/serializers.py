@@ -4,10 +4,11 @@ import re
 import webcolors
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
-from recipes.models import (Favorit, Ingredient, IngredientAmount, Recipe,
-                            ShoppingCart, Tag)
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+
+from recipes.models import (Favorit, Ingredient, IngredientAmount, Recipe,
+                            ShoppingCart, Tag)
 from users.models import Follow, User
 
 
@@ -175,12 +176,15 @@ class RecipeSerializer(serializers.ModelSerializer):
                     "Ингридиенты должны " "быть уникальными"
                 )
             ingredient_list.add(ingredient)
-            if int(ingredient_item["amount"]) < 0:
+            if (
+                int(ingredient_item["amount"]) < 0
+                or int(ingredient_item["amount"]) > 1500
+            ):
                 raise serializers.ValidationError(
                     {
                         "ingredients": (
                             "Убедитесь, что значение количества "
-                            "ингредиента больше 0"
+                            "ингредиента в пределах от 0 до 1500"
                         )
                     }
                 )
