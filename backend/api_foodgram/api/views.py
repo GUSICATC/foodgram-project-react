@@ -122,6 +122,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class SubscriptionsViewSet(UserViewSet):
     pagination_class = LimitPageNumberPagination
     queryset = User.objects.all()
+    permission_classes = (IsOwnerOrReadOnly,)
 
     @action(
         methods=["post"],
